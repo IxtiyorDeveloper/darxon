@@ -30,6 +30,54 @@ export const getOneHonadon = async (req, res) => {
   }
 };
 
+export const getHonodonFilter = async (req, res) => {
+  try {
+    let condition = {};
+    const {
+      Nomi,
+      Oshhona,
+      MehmonHona,
+      Yotohona,
+      Balkon,
+      Kirish,
+      Kvqiymadi,
+      UmmumiyMaydon,
+      Uyraqami,
+      BinoRaqami,
+      ObectNomi,
+      Etaji,
+      Kvnarhi,
+      Tip,
+      Statuslar
+  } = req.query
+  if (Nomi) condition = { ...condition, Nomi }
+  if (Oshhona) condition = { ...condition, Oshhona }
+  if (MehmonHona) condition = { ...condition, MehmonHona }
+  if (Yotohona) condition = { ...condition, Yotohona }
+  if (Balkon) condition = { ...condition, Balkon }
+  if (Kirish) condition = { ...condition, Kirish }
+  if (Kvqiymadi) condition = { ...condition, Kvqiymadi }
+  if (UmmumiyMaydon) condition = { ...condition, UmmumiyMaydon }
+  if (Uyraqami) condition = { ...condition, Uyraqami }
+  if (BinoRaqami) condition = { ...condition, BinoRaqami }
+  if (ObectNomi) condition = { ...condition, ObectNomi }
+  if (Etaji) condition = { ...condition, Etaji }
+  if (Kvnarhi) condition = { ...condition, Kvnarhi }
+  if (Tip) condition = { ...condition, Tip }
+  if (Statuslar) condition = { ...condition, Statuslar }
+  const data = await Honadon.find(condition)
+        return res.status(200).json({
+            data
+        })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      data: false,
+    });
+  }
+};
+
+
 // post
 export const addNewHonadon = async (req, res) => {
   try {

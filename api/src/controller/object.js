@@ -30,6 +30,38 @@ export const getOneObject = async (req, res) => {
   }
 };
 
+
+export const getBinoFilter = async (req, res) => {
+  try {
+    let condition = {};
+    const {
+      Nomi,
+      Ummumiy,
+      Bino,
+      QurilishniBoshlanishSanasi,
+      QurilishniBitishSanasi,
+      Tip,
+  } = req.query
+  if (Nomi) condition = { ...condition, Nomi }
+  if (Ummumiy) condition = { ...condition, Ummumiy }
+  if (Bino) condition = { ...condition, Bino }
+  if (QurilishniBoshlanishSanasi) condition = { ...condition, QurilishniBoshlanishSanasi }
+  if (QurilishniBitishSanasi) condition = { ...condition, QurilishniBitishSanasi }
+  if (Tip) condition = { ...condition, Tip }
+  const data = await Object.find(condition)
+        return res.status(200).json({
+            data
+        })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      data: false,
+    });
+  }
+};
+
+
+
 // post
 export const addNewObject = async (req, res) => {
   try {
@@ -53,6 +85,7 @@ export const addNewObject = async (req, res) => {
 };
 
 //put
+
 export const updateObject = async (req, res) => {
   try {
     const {
@@ -64,7 +97,7 @@ export const updateObject = async (req, res) => {
       Tip,
     } = req.body;
 
-    await Object.findOneAndUpdate(
+    const bino = await Object.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $set: {
@@ -76,18 +109,16 @@ export const updateObject = async (req, res) => {
           Tip,
         },
       },
-      { new: true }, // This line makes sure that the updated document is returned
-      (err, updatedObject) => {
-        if (err) {
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json({
-            massage: "Successfully updated",
-            data: updatedObject,
-          });
-        }
-      }
+      { new: true, useFindAndModify: false }
     );
+    if (!bino) {
+      res.status(500).json({
+        message: "Is not a Bino",
+        data: false,
+      });
+    } else {
+      res.status(200).json({ message: "Successfully updated", data: bino });
+    }
   } catch (error) {
     res.status(500).json({
       message: error.message,

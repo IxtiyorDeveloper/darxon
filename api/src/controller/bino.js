@@ -26,6 +26,39 @@ export const getOneBino = async (req, res) => {
   }
 };
 
+export const getBinoFilter = async (req, res) => {
+  try {
+    let condition = {};
+    const {
+      Nomi,
+      Object,
+      Qavatliligi,
+      PodezlarSoni,
+      HonalarSoni,
+      Raqami,
+      UmmumiyKvadrati,
+      Tip
+  } = req.query
+  if (Nomi) condition = { ...condition, Nomi }
+  if (Object) condition = { ...condition, Object }
+  if (Qavatliligi) condition = { ...condition, Qavatliligi }
+  if (PodezlarSoni) condition = { ...condition, PodezlarSoni }
+  if (HonalarSoni) condition = { ...condition, HonalarSoni }
+  if (Raqami) condition = { ...condition, Raqami }
+  if (UmmumiyKvadrati) condition = { ...condition, UmmumiyKvadrati }
+  const data = await Bino.find(condition)
+        return res.status(200).json({
+            data
+        })
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+      data: false,
+    });
+  }
+};
+
+
 // post
 export const addNewBino = async (req, res) => {
   try {
